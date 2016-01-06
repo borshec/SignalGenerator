@@ -20,28 +20,35 @@ state SaveToFlashFunc <<Warning>>
 [*] -right-> Declaration: Reset
 
 ' Описание и переходы от Declaration
-Declaration : 1) #define RAMP_WAVE_CODE 0
-Declaration : 2) #define MEANDE_WAVE_CODE 1
-Declaration : 3) #define SINE_WAVE_CODE 2
-Declaration : 4) int states_list[] = {RAMP_WAVE_CODE, MEANDE_WAVE_CODE, SINE_WAVE_CODE};
-Declaration : 5) int size_of_state_list = sizeof(states_list)/sizeof(states_list[0]);
-Declaration : 6) #define HZ 0
-Declaration : 7) #define KHZ 1
-Declaration : 8) #define MIN_HZ 1
-Declaration : 9) #define MAX_HZ 999
-Declaration : 10) #define MIN_KHZ 1
-Declaration : 11) #define MAX_KHZ 500
-Declaration : 12) int freq_units_list[][3] = { {HZ, MIN_HZ, MAX_HZ}, {KHZ, MIN_KHZ, MAX_KHZ} };
-Declaration : 13) int size_of_freq_units_list = sizeof(freq_units_list)/sizeof(freq_units_list[0]);
+Declaration : 1) Define and declare:
+Declaration : 
+Declaration :  #define RAMP_WAVE_CODE 0
+Declaration : #define MEANDE_WAVE_CODE 1
+Declaration : #define SINE_WAVE_CODE 2
+Declaration : int states_list[] = {RAMP_WAVE_CODE, MEANDE_WAVE_CODE, SINE_WAVE_CODE};
+Declaration : int size_of_state_list = sizeof(states_list)/sizeof(states_list[0]);
+Declaration : #define HZ 0
+Declaration : #define KHZ 1
+Declaration : #define MIN_HZ 1
+Declaration : #define MAX_HZ 999
+Declaration : #define MIN_KHZ 1
+Declaration : #define MAX_KHZ 500
+Declaration : int freq_units_list[][3] = { {HZ, MIN_HZ, MAX_HZ}, {KHZ, MIN_KHZ, MAX_KHZ} };
+Declaration : int size_of_freq_units_list = sizeof(freq_units_list)/sizeof(freq_units_list[0]);
+Declaration : 
+Declaration : 2) Execute auto transition to SetupFunc;
 Declaration --> SetupFunc: auto transition
 
 ' Описание и переходы от SetupFunc
 SetupFunc : 1) Set pins configuration;
 SetupFunc : 2) Set LCD configuration;
-SetupFunc : 3) cur_wt=EEPROM[0];
-SetupFunc : 4) cur_fq=EEPROM[1];
-SetupFunc : 5) cur_fu=EEPROM[2];
-SetupFunc : 6) Execute auto transition to MeanderMenuState or RampMenuState or SineMenuState depending on the cur_wt value;
+SetupFunc : 3) Execute:
+SetupFunc :
+SetupFunc : cur_wt=EEPROM[0];
+SetupFunc : cur_fq=EEPROM[1];
+SetupFunc : cur_fu=EEPROM[2];
+SetupFunc :
+SetupFunc : 4) Execute auto transition to WaveTypeMenuState;
 SetupFunc --> WaveTypeMenuState: auto transition
 
 ' Описание WaveTypeMenuState и переходы от него
@@ -93,6 +100,7 @@ FreqUnitMenuState : 2) Blink frequency unit value and await for keypress in loop
 FreqUnitMenuState --> SaveToFlashFunc: Select pressed
 FreqUnitMenuState --> FreqUnitIncFunc: Right pressed
 FreqUnitMenuState --> FreqUnitDecFunc: Left pressed
+FreqUnitMenuState --> FreqValueMenuState: Up pressed
 
 ' Описание FreqUnitIncFunc и переходы от него
 FreqUnitIncFunc : cur_fu++;
