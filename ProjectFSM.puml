@@ -20,17 +20,19 @@ state SaveToFlashFunc <<Warning>>
 [*] -right-> Declaration: Reset
 
 ' Описание и переходы от Declaration
-Declaration : 1) #DEFINE RAMP_WAVE_CODE 0
-Declaration : 2) #DEFINE MEANDE_WAVE_CODE 1
-Declaration : 3) #DEFINE SINE_WAVE_CODE 2
-Declaration : 4) states_list[] = {RAMP_WAVE_CODE, MEANDE_WAVE_CODE, SINE_WAVE_CODE}; 
-Declaration : 5) #DEFINE HZ 0
-Declaration : 6) #DEFINE KHZ 1
-Declaration : 7) #DEFINE MIN_HZ 1
-Declaration : 8) #DEFINE MAX_HZ 999
-Declaration : 9) #DEFINE MIN_KHZ 1
-Declaration : 10) #DEFINE MAX_KHZ 500
-Declaration : 7) freq_units_list[][] = { {HZ, MIN_HZ, MAX_HZ}, {KHZ, MIN_KHZ, MAX_KHZ} }; 
+Declaration : 1) #define RAMP_WAVE_CODE 0
+Declaration : 2) #define MEANDE_WAVE_CODE 1
+Declaration : 3) #define SINE_WAVE_CODE 2
+Declaration : 4) int states_list[] = {RAMP_WAVE_CODE, MEANDE_WAVE_CODE, SINE_WAVE_CODE};
+Declaration : 5) int size_of_state_list = sizeof(states_list)/sizeof(states_list[0]);
+Declaration : 6) #define HZ 0
+Declaration : 7) #define KHZ 1
+Declaration : 8) #define MIN_HZ 1
+Declaration : 9) #define MAX_HZ 999
+Declaration : 10) #define MIN_KHZ 1
+Declaration : 11) #define MAX_KHZ 500
+Declaration : 12) int freq_units_list[][3] = { {HZ, MIN_HZ, MAX_HZ}, {KHZ, MIN_KHZ, MAX_KHZ} };
+Declaration : 13) int size_of_freq_units_list = sizeof(freq_units_list)/sizeof(freq_units_list[0]);
 Declaration --> SetupFunc: auto transition
 
 ' Описание и переходы от SetupFunc
@@ -54,14 +56,14 @@ WaveTypeMenuState --> SaveToFlashFunc: Select pressed
 
 ' Описание WaveTypeIncFunc и переходы от него
 WaveTypeIncFunc : cur_wt++;
-WaveTypeIncFunc : if ( cur_wt > sizeof(states_list) / sizeof(states_list[0]) ) {
+WaveTypeIncFunc : if ( cur_wt > size_of_state_list - 1 ) {
 WaveTypeIncFunc : cur_wt = 0; }
 WaveTypeIncFunc --> WaveTypeMenuState: auto transition
 
 ' Описание WaveTypeDecFunc и переходы от него
 WaveTypeDecFunc : cur_wt--;
 WaveTypeDecFunc : if ( cur_wt < 0 ) {
-WaveTypeDecFunc : cur_wt = sizeof(states_list) / sizeof(states_list[0]) - 1; }
+WaveTypeDecFunc : cur_wt = size_of_state_list - 1; }
 WaveTypeDecFunc --> WaveTypeMenuState: auto transition
 
 ' Описание FreqValueMenuState и переходы от него
@@ -93,9 +95,15 @@ FreqUnitMenuState --> FreqUnitIncFunc: Right pressed
 FreqUnitMenuState --> FreqUnitDecFunc: Left pressed
 
 ' Описание FreqUnitIncFunc и переходы от него
+FreqUnitIncFunc : cur_fu++;
+FreqUnitIncFunc : if ( cur_fu > size_of_freq_units_list-1 ) {
+FreqUnitIncFunc : cur_fu = 0; }
 FreqUnitIncFunc --> FreqUnitMenuState: auto transition
 
 ' Описание FreqUnitDecFunc и переходы от него
+FreqUnitDecFunc : cur_fu--;
+FreqUnitDecFunc : if ( cur_fu < 0 ) {
+FreqUnitDecFunc : cur_fu = size_of_freq_units_list-1; }
 FreqUnitDecFunc --> FreqUnitMenuState: auto transition
 
 ' Описание SaveToFlashFunc и переходы от него
