@@ -1,0 +1,77 @@
+@startuml
+
+' Установка цветов для состояний. <<Warning>> - псевдосостояние с желтым фоном, 
+skinparam state {
+  BackgroundColor  Aquamarine
+  BackgroundColor<<Warning>> Cornsilk
+}
+
+' Объявление псевдосостояний
+state AfterReset <<Warning>>
+state Setup <<Warning>>
+state AfterBootMenuStateChoise <<choice>>
+state AfterFreqMenuStateBackChoise <<choice>>
+
+' Описание и переходы от StartPoint, AfterReset и Setup
+[*] -right-> AfterReset: Reset
+AfterReset : 1) Execute auto transition to Setup
+AfterReset --> Setup: auto transition
+Setup : 1) Set pins configuration;
+Setup : 2) Set LCD configuration;
+Setup : 3) Load from EEPROM previous value of state and assign it to cur_st;
+Setup : 4) Load from EEPROM previous value of frequency and assign it to cur_freq;
+Setup : 5) Execute auto transition to MeanderMenuState or RampMenuState or SineMenuState depending on the cur_st value;
+Setup --> AfterBootMenuStateChoise: auto transition
+
+' Переходы от AfterBootMenuStateChoise
+AfterBootMenuStateChoise --> MeanderMenuState: cur_st == meandre
+AfterBootMenuStateChoise --> RampMenuState: cur_st == ramp
+AfterBootMenuStateChoise --> SineMenuState: cur_st == sine
+
+' Описание MeanderMenuState и переходы от него
+MeanderMenuState : 1) Assign cur_st = meandre;
+MeanderMenuState : 2) Update LCD display;
+MeanderMenuState : 3) Blink 1 line in loop;
+MeanderMenuState --> MeanderMenuState: Up pressed
+MeanderMenuState --> RampMenuState: Left pressed
+MeanderMenuState --> SineMenuState: Right pressed
+MeanderMenuState --> FreqMenuState: Down pressed
+
+' Описание RampMenuState и переходы от него
+RampMenuState : 1) Assign cur_st = ramp;
+RampMenuState : 2) Update LCD display;
+RampMenuState : 3) Blink 1 line in loop;
+RampMenuState --> RampMenuState: Up pressed
+RampMenuState --> MeanderMenuState: Right pressed
+RampMenuState --> SineMenuState: Left pressed
+RampMenuState --> FreqMenuState: Down pressed
+
+' Описание SineMenuState и переходы от него
+SineMenuState : 1) Assign cur_st = sine
+SineMenuState : 2) Update LCD display
+SineMenuState : 3) Blink 1 line
+SineMenuState : 4) Loop
+SineMenuState --> SineMenuState: Up pressed
+SineMenuState --> MeanderMenuState: Left pressed
+SineMenuState --> RampMenuState: Right pressed
+SineMenuState --> FreqMenuState: Down pressed
+
+' Описание FreqMenuState и переходы от него
+FreqMenuState --> AfterFreqMenuStateBackChoise: Up pressed
+FreqMenuState --> FreqHzMenuState: Down pressed
+
+' Описание AfterFreqMenuStateBackChoise и переходы от него
+AfterFreqMenuStateBackChoise --> RampMenuState: cur_st == ramp
+AfterFreqMenuStateBackChoise --> SineMenuState:cur_st == sine
+AfterFreqMenuStateBackChoise --> MeanderMenuState: cur_st == meandre
+
+' Описание FreqHzMenuState и переходы от него
+FreqHzMenuState --> FreqMenuState: Up pressed
+
+@end
+
+'skinparam monochrome true
+state foo1 <<fork>>
+state foo2 <<join>>
+state foo3 <<end>>
+state foo4 <<Warning>>

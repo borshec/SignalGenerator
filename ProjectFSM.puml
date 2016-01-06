@@ -1,0 +1,110 @@
+@startuml
+
+' Установка цветов для состояний. <<Warning>> - псевдосостояние с желтым фоном, 
+skinparam state {
+  BackgroundColor  Aquamarine
+  BackgroundColor<<Warning>> Cornsilk
+}
+
+' Объявление псевдосостояний
+state Declaration <<Warning>>
+state SetupFunc <<Warning>>
+state WaveTypeIncFunc <<Warning>>
+state WaveTypeDecFunc <<Warning>>
+state FreqValueIncFunc <<Warning>>
+state FreqValueDecFunc <<Warning>>
+state FreqUnitIncFunc <<Warning>>
+state FreqUnitDecFunc <<Warning>>
+state SaveToFlashFunc <<Warning>>
+
+[*] -right-> Declaration: Reset
+
+' Описание и переходы от Declaration
+Declaration : 1) #DEFINE RAMP_WAVE_CODE 0
+Declaration : 2) #DEFINE MEANDE_WAVE_CODE 1
+Declaration : 3) #DEFINE SINE_WAVE_CODE 2
+Declaration : 4) states_list[] = {RAMP_WAVE_CODE, MEANDE_WAVE_CODE, SINE_WAVE_CODE}; 
+Declaration : 5) #DEFINE HZ 0
+Declaration : 6) #DEFINE KHZ 1
+Declaration : 7) #DEFINE MIN_HZ 1
+Declaration : 8) #DEFINE MAX_HZ 999
+Declaration : 9) #DEFINE MIN_KHZ 1
+Declaration : 10) #DEFINE MAX_KHZ 500
+Declaration : 7) freq_units_list[][] = { {HZ, MIN_HZ, MAX_HZ}, {KHZ, MIN_KHZ, MAX_KHZ} }; 
+Declaration --> SetupFunc: auto transition
+
+' Описание и переходы от SetupFunc
+SetupFunc : 1) Set pins configuration;
+SetupFunc : 2) Set LCD configuration;
+SetupFunc : 3) cur_wt=EEPROM[0];
+SetupFunc : 4) cur_fq=EEPROM[1];
+SetupFunc : 5) cur_fu=EEPROM[2];
+SetupFunc : 6) Execute auto transition to MeanderMenuState or RampMenuState or SineMenuState depending on the cur_wt value;
+SetupFunc --> WaveTypeMenuState: auto transition
+
+' Описание WaveTypeMenuState и переходы от него
+WaveTypeMenuState : 1) Update wave type on LCD display;
+WaveTypeMenuState : 2) Blink first line and await for keypress in loop;
+WaveTypeMenuState --> WaveTypeIncFunc: Right pressed
+WaveTypeMenuState --> WaveTypeDecFunc: Left pressed
+WaveTypeMenuState --> WaveTypeMenuState: Up pressed
+WaveTypeMenuState --> WaveTypeDecFunc: Left pressed
+WaveTypeMenuState --> FreqValueMenuState: Down pressed
+WaveTypeMenuState --> SaveToFlashFunc: Select pressed
+
+' Описание WaveTypeIncFunc и переходы от него
+WaveTypeIncFunc : cur_wt++;
+WaveTypeIncFunc : if ( cur_wt > sizeof(states_list) / sizeof(states_list[0]) ) {
+WaveTypeIncFunc : cur_wt = 0; }
+WaveTypeIncFunc --> WaveTypeMenuState: auto transition
+
+' Описание WaveTypeDecFunc и переходы от него
+WaveTypeDecFunc : cur_wt--;
+WaveTypeDecFunc : if ( cur_wt < 0 ) {
+WaveTypeDecFunc : cur_wt = sizeof(states_list) / sizeof(states_list[0]) - 1; }
+WaveTypeDecFunc --> WaveTypeMenuState: auto transition
+
+' Описание FreqValueMenuState и переходы от него
+FreqValueMenuState : 1) Update frequency value on LCD display;
+FreqValueMenuState : 2) Blink frequency value and await for keypress in loop;
+FreqValueMenuState --> WaveTypeMenuState: Up pressed
+FreqValueMenuState --> FreqUnitMenuState: Down pressed
+FreqValueMenuState --> FreqValueIncFunc: Right pressed
+FreqValueMenuState --> FreqValueDecFunc: Left pressed
+FreqValueMenuState --> SaveToFlashFunc: Select pressed
+
+' Описание FreqValueIncFunc и переходы от него
+FreqValueIncFunc : cur_fq++;
+FreqValueIncFunc : if ( cur_fq > freq_units_list[cur_fu][2] ) {
+FreqValueIncFunc : cur_fq = freq_units_list[cur_fu][1]  }
+FreqValueIncFunc --> FreqValueMenuState: auto transition
+
+' Описание FreqValueDecFunc и переходы от него
+FreqValueDecFunc : cur_fq--;
+FreqValueDecFunc : if ( cur_fq < freq_units_list[cur_fu][1] ) {
+FreqValueDecFunc : cur_fq = freq_units_list[cur_fu][2]  }
+FreqValueDecFunc --> FreqValueMenuState: auto transition
+
+' Описание FreqUnitMenuState и переходы от него
+FreqUnitMenuState : 1) Update frequency unit value on LCD display;
+FreqUnitMenuState : 2) Blink frequency unit value and await for keypress in loop;
+FreqUnitMenuState --> SaveToFlashFunc: Select pressed
+FreqUnitMenuState --> FreqUnitIncFunc: Right pressed
+FreqUnitMenuState --> FreqUnitDecFunc: Left pressed
+
+' Описание FreqUnitIncFunc и переходы от него
+FreqUnitIncFunc --> FreqUnitMenuState: auto transition
+
+' Описание FreqUnitDecFunc и переходы от него
+FreqUnitDecFunc --> FreqUnitMenuState: auto transition
+
+' Описание SaveToFlashFunc и переходы от него
+SaveToFlashFunc : EEPROM[0]=cur_wt;
+SaveToFlashFunc : EEPROM[1]=cur_fq;
+SaveToFlashFunc : EEPROM[1]=cur_fu;
+SaveToFlashFunc --> GenerationState: auto transition
+
+' Описание GenerationState и переходы от него
+GenerationState : 1) Generation loop;
+
+@enduml
