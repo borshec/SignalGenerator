@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
+#include "WorkWithButtons.h"
 
-const String states_list[] = {"[ RAMP WAVE ]", "[ MEANDER WAVE ] ", "[ SINE WAVE ]" };
+const String states_list[] = {"[RAMP]", "[MEANDER] ", "[SINE]" };
 const int size_of_state_list = sizeof(states_list)/sizeof(states_list[0]);
 
 // declaraing and defining lcd object
@@ -13,7 +14,7 @@ void setup() {
     // dimensions (width and height) of the display. begin() needs to be 
     // called before any other LCD library commands. 
     lcd.begin(16, 2);
-    
+    lcd.clear();
     // Position the LCD cursor; Syntax: lcd.setCursor(col, row), where 
     // lcd - a variable of type LiquidCrystal; 
     // col - the column at which to position the cursor (with 0 being the first column); 
@@ -26,9 +27,11 @@ void setup() {
     lcd.print(size_of_state_list);
     
     lcd.setCursor(0,1);
-    lcd.print(states_list[0]);
+    lcd.print(states_list[1]);
 }
 
 void loop() {
-
+    lcd.setCursor(8,0);
+    lcd.print(read_LCD_button());
+    delay(1000);      
 }
