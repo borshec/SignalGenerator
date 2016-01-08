@@ -17,16 +17,13 @@ state FreqUnitIncFunc <<Warning>>
 state FreqUnitDecFunc <<Warning>>
 state SaveToFlashFunc <<Warning>>
 
-[*] -right-> Declaration: Reset
+[*] -left-> Declaration: Reset
 
 ' Описание и переходы от Declaration
 Declaration : 1) Define and declare:
 Declaration : 
-Declaration :  #define RAMP_WAVE_CODE 0
-Declaration : #define MEANDE_WAVE_CODE 1
-Declaration : #define SINE_WAVE_CODE 2
-Declaration : int states_list[] = {RAMP_WAVE_CODE, MEANDE_WAVE_CODE, SINE_WAVE_CODE};
-Declaration : int size_of_state_list = sizeof(states_list)/sizeof(states_list[0]);
+Declaration : const string states_list[] = {"RAMP WAVE", "MEANDER WAVE", "SINE WAVE"};
+Declaration : const int size_of_state_list = sizeof(states_list)/sizeof(states_list[0]);
 Declaration : #define HZ 0
 Declaration : #define KHZ 1
 Declaration : #define MIN_HZ 1
@@ -37,7 +34,7 @@ Declaration : int freq_units_list[][3] = { {HZ, MIN_HZ, MAX_HZ}, {KHZ, MIN_KHZ, 
 Declaration : int size_of_freq_units_list = sizeof(freq_units_list)/sizeof(freq_units_list[0]);
 Declaration : 
 Declaration : 2) Execute auto transition to SetupFunc;
-Declaration --> SetupFunc: auto transition
+Declaration -left-> SetupFunc: auto transition
 
 ' Описание и переходы от SetupFunc
 SetupFunc : 1) Set pins configuration;
@@ -55,7 +52,6 @@ SetupFunc --> WaveTypeMenuState: auto transition
 WaveTypeMenuState : 1) Update wave type on LCD display;
 WaveTypeMenuState : 2) Blink first line and await for keypress in loop;
 WaveTypeMenuState --> WaveTypeIncFunc: Right pressed
-WaveTypeMenuState --> WaveTypeDecFunc: Left pressed
 WaveTypeMenuState --> WaveTypeMenuState: Up pressed
 WaveTypeMenuState --> WaveTypeDecFunc: Left pressed
 WaveTypeMenuState --> FreqValueMenuState: Down pressed
@@ -101,6 +97,7 @@ FreqUnitMenuState --> SaveToFlashFunc: Select pressed
 FreqUnitMenuState --> FreqUnitIncFunc: Right pressed
 FreqUnitMenuState --> FreqUnitDecFunc: Left pressed
 FreqUnitMenuState --> FreqValueMenuState: Up pressed
+FreqUnitMenuState --> FreqUnitMenuState: Down pressed
 
 ' Описание FreqUnitIncFunc и переходы от него
 FreqUnitIncFunc : cur_fu++;
