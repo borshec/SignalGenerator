@@ -39,11 +39,11 @@ Declaration -left-> SetupFunc: auto transition
 ' Описание и переходы от SetupFunc
 SetupFunc : 1) Set pins configuration;
 SetupFunc : 2) Set LCD configuration;
-SetupFunc : 3) Execute:
+SetupFunc : 3) If it is not first execution of programm, then load state params from EEPROM:
 SetupFunc :
-SetupFunc : cur_wt=EEPROM[0];
-SetupFunc : cur_fq=EEPROM[1];
-SetupFunc : cur_fu=EEPROM[2];
+SetupFunc : cur_wt=EEPROM[1];
+SetupFunc : cur_fq=EEPROM[2];
+SetupFunc : cur_fu=EEPROM[3];
 SetupFunc :
 SetupFunc : 4) Execute auto transition to WaveTypeMenuState;
 SetupFunc --> WaveTypeMenuState: auto transition
@@ -112,9 +112,9 @@ FreqUnitDecFunc : cur_fu = size_of_freq_units_list-1; }
 FreqUnitDecFunc --> FreqUnitMenuState: auto transition
 
 ' Описание SaveToFlashFunc и переходы от него
-SaveToFlashFunc : EEPROM[0]=cur_wt;
-SaveToFlashFunc : EEPROM[1]=cur_fq;
-SaveToFlashFunc : EEPROM[1]=cur_fu;
+SaveToFlashFunc : EEPROM[1]=cur_wt;
+SaveToFlashFunc : EEPROM[2]=cur_fq;
+SaveToFlashFunc : EEPROM[3]=cur_fu;
 SaveToFlashFunc --> GenerationState: auto transition
 
 ' Описание GenerationState и переходы от него
