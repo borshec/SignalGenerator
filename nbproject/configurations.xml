@@ -3,6 +3,12 @@
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="f2" displayName="Documentation" projectFiles="true">
       <itemPath>Documentation/Arduino LCD KeyPad Shield.pdf</itemPath>
+      <itemPath>Documentation/EEPROM_Object.pdf</itemPath>
+      <itemPath>Documentation/LiquidCrystal_Begin.pdf</itemPath>
+      <itemPath>Documentation/LiquidCrystal_Clear.pdf</itemPath>
+      <itemPath>Documentation/LiquidCrystal_Constructor.pdf</itemPath>
+      <itemPath>Documentation/LiquidCrystal_Print.pdf</itemPath>
+      <itemPath>Documentation/LiquidCrystal_SetCursor.pdf</itemPath>
       <itemPath>Documentation/PlantUML_Language_Reference_Guide.pdf</itemPath>
       <itemPath>Documentation/String constructors.pdf</itemPath>
     </logicalFolder>
@@ -63,6 +69,33 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Documentation/EEPROM_Object.pdf" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Begin.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Clear.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Constructor.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Print.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_SetCursor.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Documentation/PlantUML_Language_Reference_Guide.pdf"
             ex="false"
             tool="3"
@@ -103,6 +136,33 @@
         </asmTool>
       </compileType>
       <item path="Documentation/Arduino LCD KeyPad Shield.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/EEPROM_Object.pdf" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Begin.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Clear.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Constructor.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_Print.pdf"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Documentation/LiquidCrystal_SetCursor.pdf"
             ex="false"
             tool="3"
             flavor2="0">
