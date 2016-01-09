@@ -4,6 +4,7 @@
     <logicalFolder name="f2" displayName="Documentation" projectFiles="true">
       <itemPath>Documentation/Arduino LCD KeyPad Shield.pdf</itemPath>
       <itemPath>Documentation/Arduino_Uno_r3 Schematic.pdf</itemPath>
+      <itemPath>Documentation/CPP switch-case.pdf</itemPath>
       <itemPath>Documentation/EEPROM_Object.pdf</itemPath>
       <itemPath>Documentation/LiquidCrystal_Begin.pdf</itemPath>
       <itemPath>Documentation/LiquidCrystal_Clear.pdf</itemPath>
@@ -75,6 +76,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Documentation/CPP switch-case.pdf" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Documentation/EEPROM_Object.pdf" ex="false" tool="3" flavor2="0">
       </item>
@@ -156,6 +159,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Documentation/CPP switch-case.pdf" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Documentation/EEPROM_Object.pdf" ex="false" tool="3" flavor2="0">
       </item>
