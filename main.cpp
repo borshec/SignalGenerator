@@ -19,7 +19,8 @@ const String freq_units_list[] = {"Hz", "KHz"}; // array of possible frequency u
 const int size_of_freq_units_list = sizeof (freq_units_list) / sizeof (freq_units_list[0]); // amount of possible frequency units
 const int freq_limits[][2] = {
     {1, 999},
-    {1, 500}};
+    {1, 500}
+};
 
 int cur_st = 0; // set "current state" to default value 
 int cur_wt = 0; // set "current wave type" to default value 
@@ -109,13 +110,13 @@ void FreqValueMenuState(void) {
                 break;
             case btnRIGHT:
                 cur_fq++;
-                if (cur_fq > freq_limits[cur_fu][1]) {
-                    cur_fq = freq_limits[cur_fu][0]; 
+                if (cur_fq > freq_limits[cur_fu][1]) {   // Надо подумать как убрать дублирование кода тут и ниже
+                    cur_fq = freq_limits[cur_fu][0];
                 }
                 break;
             case btnLEFT:
                 cur_fq--;
-                if (cur_fq < freq_limits[cur_fu][0]) {
+                if (cur_fq < freq_limits[cur_fu][0]) {  // и тут !
                     cur_fq = freq_limits[cur_fu][1];
                 }
                 break;
@@ -144,11 +145,23 @@ void FreqUnitMenuState(void) {
                 if (cur_fu < 0) {
                     cur_fu = size_of_freq_units_list - 1;
                 }
+                if (cur_fq > freq_limits[cur_fu][1]) {
+                    cur_fq = freq_limits[cur_fu][1];
+                }
+                if (cur_fq < freq_limits[cur_fu][0]) {
+                    cur_fq = freq_limits[cur_fu][0];
+                }
                 break;
             case btnRIGHT:
                 cur_fu++;
                 if (cur_fu > size_of_freq_units_list - 1) {
                     cur_fu = 0;
+                }
+                if (cur_fq > freq_limits[cur_fu][1]) {
+                    cur_fq = freq_limits[cur_fu][1];
+                }
+                if (cur_fq < freq_limits[cur_fu][0]) {
+                    cur_fq = freq_limits[cur_fu][0];
                 }
                 break;
         }
