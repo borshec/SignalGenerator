@@ -24,7 +24,7 @@ const int freq_limits[][2] = {
 
 int cur_st = 0; // set "current state" to default value 
 int cur_wt = 0; // set "current wave type" to default value 
-int cur_fq = 0; // set "current frequency" to default value 
+int cur_fq = freq_limits[0][0]; // set "current frequency" to default value 
 int cur_fu = 0; // set "frequency unit" to default value
 
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7); // create global seen object for LCD display
@@ -57,24 +57,32 @@ void setup() {
 }
 
 void loop() {
-    Serial.println(size_of_freq_units_list);
-    WaveTypeMenuState();
+    UpdateLCD();
+    switch (cur_st) {
+        case 0:
+            WaveTypeMenuState();
+            break;
+        case 1:
+            FreqValueMenuState();
+            break;
+        case 2:
+            FreqUnitMenuState();
+            break;
+    }
 }
 
 void WaveTypeMenuState(void) {
-    cur_st = 0;
-    UpdateLCD();
     while (true) {
         delay(buttons_read_delay);
         switch (read_LCD_button()) {
             case btnNONE:
                 continue;
             case btnDOWN:
-                FreqValueMenuState();
-                break;
+                cur_st = 1;
+                return;
             case btnUP:
-                FreqUnitMenuState();
-                break;
+                cur_st = 2;
+                return;
             case btnLEFT:
                 cur_wt--;
                 if (cur_wt < 0) {
@@ -94,8 +102,6 @@ void WaveTypeMenuState(void) {
 }
 
 void FreqValueMenuState(void) {
-    cur_st = 1;
-    UpdateLCD();
     while (true) {
         delay(buttons_read_delay);
         Serial.println("FV");
@@ -103,20 +109,20 @@ void FreqValueMenuState(void) {
             default:
                 continue;
             case btnUP:
-                WaveTypeMenuState();
-                break;
+                cur_st = 0;
+                return;
             case btnDOWN:
-                FreqUnitMenuState();
-                break;
+                cur_st = 2;
+                return;
             case btnRIGHT:
                 cur_fq++;
-                if (cur_fq > freq_limits[cur_fu][1]) {   // Надо подумать как убрать дублирование кода тут и ниже
+                if (cur_fq > freq_limits[cur_fu][1]) { // Надо подумать как убрать дублирование кода тут и ниже
                     cur_fq = freq_limits[cur_fu][0];
                 }
                 break;
             case btnLEFT:
                 cur_fq--;
-                if (cur_fq < freq_limits[cur_fu][0]) {  // и тут !
+                if (cur_fq < freq_limits[cur_fu][0]) { // и тут !
                     cur_fq = freq_limits[cur_fu][1];
                 }
                 break;
@@ -127,19 +133,17 @@ void FreqValueMenuState(void) {
 }
 
 void FreqUnitMenuState(void) {
-    cur_st = 2;
-    UpdateLCD();
     while (true) {
         delay(buttons_read_delay);
         switch (read_LCD_button()) {
             default:
                 continue;
             case btnUP:
-                FreqValueMenuState();
-                break;
+                cur_st = 1;
+                return;
             case btnDOWN:
-                WaveTypeMenuState();
-                break;
+                cur_st = 0;
+                return;
             case btnLEFT:
                 cur_fu--;
                 if (cur_fu < 0) {
