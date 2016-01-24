@@ -73,7 +73,6 @@ void loop() {
 
 void WaveTypeMenuState(void) {
     while (true) {
-        delay(buttons_read_delay);
         switch (read_LCD_button()) {
             case btnNONE:
                 continue;
@@ -88,23 +87,22 @@ void WaveTypeMenuState(void) {
                 if (cur_wt < 0) {
                     cur_wt = size_of_wave_types_list - 1;
                 }
+                UpdateLCD();
                 break;
             case btnRIGHT:
                 cur_wt++;
                 if (cur_wt > size_of_wave_types_list - 1) {
                     cur_wt = 0;
                 }
+                UpdateLCD();
                 break;
         }
-        UpdateLCD();
     }
     return;
 }
 
 void FreqValueMenuState(void) {
     while (true) {
-        delay(buttons_read_delay);
-        Serial.println("FV");
         switch (read_LCD_button()) {
             default:
                 continue;
@@ -116,25 +114,25 @@ void FreqValueMenuState(void) {
                 return;
             case btnRIGHT:
                 cur_fq++;
-                if (cur_fq > freq_limits[cur_fu][1]) { // Надо подумать как убрать дублирование кода тут и ниже
+                if (cur_fq > freq_limits[cur_fu][1]) {
                     cur_fq = freq_limits[cur_fu][0];
                 }
+                UpdateLCD();
                 break;
             case btnLEFT:
                 cur_fq--;
-                if (cur_fq < freq_limits[cur_fu][0]) { // и тут !
+                if (cur_fq < freq_limits[cur_fu][0]) {
                     cur_fq = freq_limits[cur_fu][1];
                 }
+                UpdateLCD();
                 break;
         }
-        UpdateLCD();
     }
     return;
 }
 
 void FreqUnitMenuState(void) {
     while (true) {
-        delay(buttons_read_delay);
         switch (read_LCD_button()) {
             default:
                 continue;
@@ -155,6 +153,7 @@ void FreqUnitMenuState(void) {
                 if (cur_fq < freq_limits[cur_fu][0]) {
                     cur_fq = freq_limits[cur_fu][0];
                 }
+                UpdateLCD();
                 break;
             case btnRIGHT:
                 cur_fu++;
@@ -167,15 +166,14 @@ void FreqUnitMenuState(void) {
                 if (cur_fq < freq_limits[cur_fu][0]) {
                     cur_fq = freq_limits[cur_fu][0];
                 }
+                UpdateLCD();
                 break;
         }
-        UpdateLCD();
     }
     return;
 }
 
 void UpdateLCD(void) {
-    Serial.println(" ");
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Wave:");

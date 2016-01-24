@@ -20,6 +20,11 @@
 #define btnLEFT   3
 #define btnSELECT 4
 #define btnNONE   5
+#define btnRIGHThold   6
+#define btnUPhold     7
+#define btnDOWNhold   8
+#define btnLEFThold   9
+#define btnSELECThold 10
 
 int read_LCD_button(void);
 
